@@ -9,6 +9,9 @@ const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const [title, setTitle] = useState('')
+  const [author, setAuthor] = useState('')
+  const [url, setUrl] = useState('')
   const [user, setUser] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
 
@@ -49,6 +52,21 @@ const App = () => {
     window.localStorage.clear()
   }
 
+  const addBlog = async event => {
+    event.preventDefault()
+    const blogObject = {
+      title: title,
+      author: author,
+      url: url,
+    }
+
+    const blog = await blogService.create(blogObject)
+    setBlogs(blogs.concat(blog))
+    setTitle('')
+    setAuthor('')
+    setUrl('')
+  }
+
   if (user === null) {
     return (
       <div>
@@ -67,7 +85,18 @@ const App = () => {
   return (
     <div>
       <ErrorNotification message={errorMessage} />
-      <BlogList blogs={blogs} user={user} handleLogout={handleLogout} />
+      <BlogList
+        blogs={blogs}
+        user={user}
+        handleLogout={handleLogout}
+        title={title}
+        author={author}
+        url={url}
+        setTitle={setTitle}
+        setAuthor={setAuthor}
+        setUrl={setUrl}
+        addBlog={addBlog}
+      />
     </div>
   )
 }
