@@ -16,11 +16,22 @@ const App = () => {
     blogService.getAll().then(blogs => setBlogs(blogs))
   }, [])
 
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem('loggedBlogUser')
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON)
+      setUser(user)
+      blogService.setToken(user.token)
+    }
+  }, [])
+
   const handleLogin = async event => {
     event.preventDefault()
 
     try {
       const user = await loginService.login({ username, password })
+
+      window.localStorage.setItem('loggedBlogUser', JSON.stringify(user))
       setUser(user)
       setUsername('')
       setPassword('')
@@ -30,6 +41,12 @@ const App = () => {
         setErrorMessage(null)
       }, 5000)
     }
+  }
+
+  const handleLogout = event => {
+    event.preventDefault()
+    setUser(null)
+    window.localStorage.clear()
   }
 
   if (user === null) {
@@ -50,7 +67,7 @@ const App = () => {
   return (
     <div>
       <ErrorNotification message={errorMessage} />
-      <BlogList blogs={blogs} user={user} />
+      <BlogList blogs={blogs} user={user} handleLogout={handleLogout} />
     </div>
   )
 }
