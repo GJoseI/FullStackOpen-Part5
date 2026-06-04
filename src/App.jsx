@@ -4,6 +4,7 @@ import loginService from './services/login'
 import LoginForm from './components/LoginForm'
 import ErrorNotification from './components/ErrorNotification'
 import BlogList from './components/BlogList'
+import Notification from './components/Notification'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -14,6 +15,7 @@ const App = () => {
   const [url, setUrl] = useState('')
   const [user, setUser] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
+  const [message, setMessage] = useState(null)
 
   useEffect(() => {
     blogService.getAll().then(blogs => setBlogs(blogs))
@@ -65,6 +67,10 @@ const App = () => {
     setTitle('')
     setAuthor('')
     setUrl('')
+    setMessage(`a new blog ${blog.title} by ${blog.author} was added`)
+    setTimeout(() => {
+      setMessage(null)
+    }, 5000)
   }
 
   if (user === null) {
@@ -85,6 +91,7 @@ const App = () => {
   return (
     <div>
       <ErrorNotification message={errorMessage} />
+      <Notification message={message} />
       <BlogList
         blogs={blogs}
         user={user}
