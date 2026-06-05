@@ -16,6 +16,7 @@ const App = () => {
   const [user, setUser] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
   const [message, setMessage] = useState(null)
+  const [blogFormVisible, setBlogFormVisible] = useState(false)
 
   useEffect(() => {
     blogService.getAll().then(blogs => setBlogs(blogs))
@@ -103,6 +104,8 @@ const App = () => {
         setAuthor={setAuthor}
         setUrl={setUrl}
         addBlog={addBlog}
+        blogFormVisible={blogFormVisible}
+        setBlogFormVisible={setBlogFormVisible}
       />
     </div>
   )
