@@ -10,13 +10,9 @@ const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
   const [user, setUser] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
   const [message, setMessage] = useState(null)
-  const [blogFormVisible, setBlogFormVisible] = useState(false)
 
   useEffect(() => {
     blogService.getAll().then(blogs => setBlogs(blogs))
@@ -49,25 +45,9 @@ const App = () => {
     }
   }
 
-  const handleLogout = event => {
-    event.preventDefault()
-    setUser(null)
-    window.localStorage.clear()
-  }
-
-  const addBlog = async event => {
-    event.preventDefault()
-    const blogObject = {
-      title: title,
-      author: author,
-      url: url,
-    }
-
+  const addBlog = async blogObject => {
     const blog = await blogService.create(blogObject)
     setBlogs(blogs.concat(blog))
-    setTitle('')
-    setAuthor('')
-    setUrl('')
     setMessage(`a new blog ${blog.title} by ${blog.author} was added`)
     setTimeout(() => {
       setMessage(null)
@@ -96,16 +76,10 @@ const App = () => {
       <BlogList
         blogs={blogs}
         user={user}
-        handleLogout={handleLogout}
-        title={title}
-        author={author}
-        url={url}
-        setTitle={setTitle}
-        setAuthor={setAuthor}
-        setUrl={setUrl}
-        addBlog={addBlog}
-        blogFormVisible={blogFormVisible}
-        setBlogFormVisible={setBlogFormVisible}
+        setUser={setUser}
+        createBlog={addBlog}
+        setBlogs={setBlogs}
+        setMessage={setMessage}
       />
     </div>
   )
