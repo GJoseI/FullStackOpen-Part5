@@ -1,7 +1,7 @@
 import Blog from './Blog'
 import BlogForm from './BlogForm'
 import Togglable from './Togglable'
-import blogService from './services/blogs'
+import blogService from '../services/blogs'
 
 const BlogList = ({ blogs, user, setUser, setBlogs, setMessage }) => {
   const addBlog = async blogObject => {
@@ -13,11 +13,11 @@ const BlogList = ({ blogs, user, setUser, setBlogs, setMessage }) => {
     }, 5000)
   }
 
-  const blogForm = () => {
-    ;<Togglable buttonLable="create new blog">
+  const blogForm = () => (
+    <Togglable buttonLabel="create new blog">
       <BlogForm createBlog={addBlog} />
     </Togglable>
-  }
+  )
 
   const handleLogout = event => {
     event.preventDefault()
@@ -28,7 +28,12 @@ const BlogList = ({ blogs, user, setUser, setBlogs, setMessage }) => {
   return (
     <div>
       <h2>blogs</h2>
-      <p>{user.name} logged in<button type="submit" onClick={handleLogout}>logout</button></p>
+      <p>
+        {user.name} logged in{' '}
+        <button type="submit" onClick={handleLogout}>
+          logout
+        </button>
+      </p>
       {blogForm()}
       {blogs.map(blog => (
         <Blog key={blog.id} blog={blog} />
