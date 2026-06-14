@@ -4,7 +4,7 @@ import blogService from '../services/blogs'
 const Blog = ({ blog, user, setMessage }) => {
   const [visible, setVisible] = useState(false)
   const [buttonLabel, setButtonLabel] = useState('show')
-  const [likes, setLikes] = useState('')
+  const [likes, setLikes] = useState(blog.likes)
 
   const showWhenVisible = { display: visible ? '' : 'none' }
 
