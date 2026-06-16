@@ -35,9 +35,11 @@ const BlogList = ({ blogs, user, setUser, setBlogs, setMessage }) => {
         </button>
       </p>
       {blogForm()}
-      {blogs.map(blog => (
-        <Blog key={blog.id} blog={blog} user={user} setMessage={setMessage} />
-      ))}
+      {[...blogs]
+        .sort((a, b) => b.likes - a.likes)
+        .map(blog => (
+          <Blog key={blog.id} blog={blog} user={user} setMessage={setMessage} blogs={blogs} setBlogs={setBlogs} />
+        ))}
     </div>
   )
 }
