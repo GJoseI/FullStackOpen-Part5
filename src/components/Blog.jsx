@@ -1,10 +1,11 @@
 import { useState } from 'react'
 import blogService from '../services/blogs'
 
-const Blog = ({ blog, setMessage, blogs,  setBlogs }) => {
+const Blog = ({ blog, setMessage, blogs, setBlogs, user, setErrorMessage }) => {
   const [visible, setVisible] = useState(false)
   const [buttonLabel, setButtonLabel] = useState('show')
   const [likes, setLikes] = useState(blog.likes)
+  const [isRemoved, setIsRemoved] = useState(false)
 
   const showWhenVisible = { display: visible ? '' : 'none' }
 
@@ -21,11 +22,11 @@ const Blog = ({ blog, setMessage, blogs,  setBlogs }) => {
     marginBottom: 5,
   }
 
-  const likeBlog = async () =>{
+  const likeBlog = async () => {
     const updatedBlog = {
       ...blog,
       likes: likes + 1,
-      user: blog.user?.id || blog.user
+      user: blog.user?.id || blog.user,
     }
     await blogService.update(blog.id, updatedBlog)
     setMessage('Blog liked!')
@@ -33,22 +34,41 @@ const Blog = ({ blog, setMessage, blogs,  setBlogs }) => {
       setMessage(null)
     }, 5000)
     setLikes(likes + 1)
-    setBlogs(blogs.map(b => b.id === blog.id ? updatedBlog : b))
+    setBlogs(blogs.map(b => (b.id === blog.id ? updatedBlog : b)))
   }
 
-  return (
-    <div style={blogStyle}>
-      <div>
-        {blog.title} {blog.author} 
-        <button onClick={toggleVisibility}>{buttonLabel}</button>
+  const removeBlog = async () => {
+    if (user.id === blog.user.id) {
+      if (confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
+        await blogService.delete(blog.id)
+        setIsRemoved(true)
+      }
+    }
+    setErrorMessage('Blog was not created by user')
+    setTimeout(() => {
+      setErrorMessage(null)
+    }, 5000)
+  }
+
+  if (!isRemoved) {
+    return (
+      <div style={blogStyle}>
+        <div>
+          {blog.title} {blog.author}
+          <button onClick={toggleVisibility}>{buttonLabel}</button>
+        </div>
+        <div style={showWhenVisible}>
+          {blog.url}
+          <br />
+          likes:{likes}<button type="submit" onClick={likeBlog}>like</button>
+          <br />
+          {blog.user?.name}
+          <br />
+          <button type="submit" onClick={removeBlog}>remove</button>
+        </div>
       </div>
-      <div style={showWhenVisible}>
-        {blog.url}<br/>
-        likes:{likes} <button type='submit' onClick={likeBlog}>like</button><br/>
-        {blog.user?.name}
-      </div>
-    </div>
-  )
+    )
+  }
 }
 
 export default Blog

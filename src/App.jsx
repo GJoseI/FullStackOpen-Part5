@@ -80,6 +80,7 @@ const App = () => {
         createBlog={addBlog}
         setBlogs={setBlogs}
         setMessage={setMessage}
+        setErrorMessage={setErrorMessage}
       />
     </div>
   )
