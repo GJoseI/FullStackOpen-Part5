@@ -40,7 +40,7 @@ const Blog = ({ blog, setMessage, blogs, setBlogs, user, setErrorMessage }) => {
   const removeBlog = async () => {
     if (user.id === blog.user.id) {
       if (confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
-        await blogService.delete(blog.id)
+        await blogService.deleteBlog(blog.id)
         setIsRemoved(true)
       }
     }
